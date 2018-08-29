@@ -1,4 +1,4 @@
-package com.cjw.concurrency.example.aqs;
+package com.cjw.concurrency.example.threadPool;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,18 +9,17 @@ import java.util.concurrent.RecursiveTask;
 /**
  * @author codeAC
  * @Date: 2018/8/29
- * @Time: 13:07
- * @Description
+ * @Time: 18:35
+ * @Description: ForkJoinPool支持开启新线程执行被分解的任务，同时也会复用以前的老线程去承担被分解的任务，具备线程池的通用属性
  */
-
 @Slf4j
-public class ForkJoinTaskExample extends RecursiveTask<Integer> {
+public class ForkJoinPoolExample extends RecursiveTask<Integer> {
 
     private static final int threshold = 2;
     private int start;
     private int end;
 
-    private ForkJoinTaskExample(int start, int end) {
+    private ForkJoinPoolExample(int start, int end) {
         this.start = start;
         this.end = end;
     }
@@ -38,8 +37,8 @@ public class ForkJoinTaskExample extends RecursiveTask<Integer> {
         } else {
             // 如果任务大于阈值，就分裂成两个子任务计算
             int middle = (start + end) / 2;
-            ForkJoinTaskExample leftTask = new ForkJoinTaskExample(start, middle);
-            ForkJoinTaskExample rightTask = new ForkJoinTaskExample(middle + 1, end);
+            ForkJoinPoolExample leftTask = new ForkJoinPoolExample(start, middle);
+            ForkJoinPoolExample rightTask = new ForkJoinPoolExample(middle + 1, end);
 
             // 执行子任务
             /*leftTask.fork();
@@ -60,7 +59,7 @@ public class ForkJoinTaskExample extends RecursiveTask<Integer> {
         ForkJoinPool forkjoinPool = new ForkJoinPool();
 
         //生成一个计算任务，计算1+2+3+4
-        ForkJoinTaskExample task = new ForkJoinTaskExample(1, 100);
+        ForkJoinPoolExample task = new ForkJoinPoolExample(1, 100);
 
         //执行一个任务
         Future<Integer> result = forkjoinPool.submit(task);
