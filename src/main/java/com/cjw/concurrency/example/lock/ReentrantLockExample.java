@@ -1,24 +1,21 @@
-package com.cjw.concurrency.example.commonUnsafe;
+package com.cjw.concurrency.example.lock;
 
-import com.cjw.concurrency.annoations.NotThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author codeAC
  * @Date: 2018/8/28
- * @Time: 10:17
+ * @Time: 19:09
  * @Description
  */
 @Slf4j
-@NotThreadSafe
-public class ArrayListExample {
+public class ReentrantLockExample {
 
     //请求总数
     private static int clientTotal = 5000;
@@ -26,7 +23,9 @@ public class ArrayListExample {
     //同时并发执行的线程数
     private static  int threadTotal = 200;
 
-    private static List<Integer> list = new ArrayList<>();
+    private static  int count = 0;
+
+    private final static ReentrantLock lock = new ReentrantLock(); //默认是非公平锁
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -46,9 +45,14 @@ public class ArrayListExample {
         }
         countDownLatch.await();
         executorService.shutdown();
-        log.info("size:{}",list.size());
+        log.info("count:{}",count);
     }
     private static void add() {
-        list.add(1);
+        lock.lock();
+        try {
+            count++;
+        }finally {
+            lock.unlock();
+        }
     }
 }

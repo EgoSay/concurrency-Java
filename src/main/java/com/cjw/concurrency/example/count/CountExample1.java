@@ -16,6 +16,7 @@ import java.util.concurrent.Semaphore;
 @Slf4j
 @NotThreadSafe
 public class CountExample1 {
+
     //请求总数
     private static int clientTotal = 5000;
 

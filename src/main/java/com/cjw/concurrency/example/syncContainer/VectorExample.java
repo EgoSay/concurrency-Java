@@ -1,10 +1,11 @@
-package com.cjw.concurrency.example.commonUnsafe;
+package com.cjw.concurrency.example.syncContainer;
 
-import com.cjw.concurrency.annoations.NotThreadSafe;
+import com.cjw.concurrency.annoations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,12 +14,12 @@ import java.util.concurrent.Semaphore;
 /**
  * @author codeAC
  * @Date: 2018/8/28
- * @Time: 10:17
+ * @Time: 12:37
  * @Description
  */
 @Slf4j
-@NotThreadSafe
-public class ArrayListExample {
+@ThreadSafe
+public class VectorExample {
 
     //请求总数
     private static int clientTotal = 5000;
@@ -26,7 +27,7 @@ public class ArrayListExample {
     //同时并发执行的线程数
     private static  int threadTotal = 200;
 
-    private static List<Integer> list = new ArrayList<>();
+    private static List<Integer> list = new Vector<>();
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
